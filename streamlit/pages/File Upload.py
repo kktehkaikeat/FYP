@@ -1,6 +1,4 @@
 import streamlit as st
-import csv
-import glob
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,6 +17,7 @@ if uploaded_file is not None:
 
     df = pd.concat(dfList,sort=False)
 
+    st.session_state["df"] = df
 
     st.write(df)
     df['datetime'] = pd.to_datetime(df.Date.astype(str)+' '+df.Time.astype(str))
@@ -41,6 +40,8 @@ if uploaded_file is not None:
 
     df_normal = df[df["Label"] == 0]
     df_abnormal = df[df["Label"] == 1]
+
+    st.session_state["df_abnormal"] = df_abnormal
 
     
     bx = sns.countplot(x ='Port Number', data = df_abnormal, order=df_abnormal.value_counts(df_abnormal['Port Number']).iloc[:3].index)
@@ -160,6 +161,7 @@ if uploaded_file is not None:
 
     df_prediction_normal = df_prediction[df_prediction["Label"] == 0]
     df_prediction_abnormal = df_prediction[df_prediction["Label"] == 1]
+    st.session_state["df_prediction_abnormal"] = df_prediction_abnormal
 
     df_sample_prediction_normal = df_prediction_normal.sample(n=153)
 
